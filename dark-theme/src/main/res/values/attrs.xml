@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DarkThemeButton">
+        <attr name="moonColor" format="color" />
+        <attr name="sunColor" format="color" />
+        <attr name="switchThemeOnClick" format="boolean"/>
+    </declare-styleable>
+</resources>

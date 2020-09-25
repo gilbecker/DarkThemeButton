@@ -1,0 +1,4 @@
+include ':dark-theme'
+include ':app:dark'
+include ':app'
+rootProject.name = "DarkMode"
