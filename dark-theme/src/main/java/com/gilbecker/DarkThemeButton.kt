@@ -2,17 +2,16 @@ package com.gilbecker
 
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.MotionEvent.*
 import android.view.View
 import android.widget.FrameLayout
-import androidx.annotation.ColorInt
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import com.gilbecker.animator.DarkThemeButtonAnimator
-import com.gilbecker.repo.DarkThemeRepository
+import com.gilbecker.handler.DefaultStateChangedHandler
+import com.gilbecker.repository.DarkThemeRepository
 import kotlinx.android.synthetic.main.dark_theme_button.view.*
 
 class DarkThemeButton(
@@ -20,55 +19,66 @@ class DarkThemeButton(
     attrs: AttributeSet
 ) : FrameLayout(context, attrs), View.OnClickListener, View.OnTouchListener {
 
-    private var onThemeChangedListener: OnThemeChangedListener? = null
-    private var onAnimationFinishedListener: OnAnimationFinishedListener? = null
-
-    private var isDark: Boolean = false
-    private var sunColor = Color.parseColor("#ffdc00")
-    private var moonColor = Color.parseColor("#dddddd")
+    private var currentButtonState = ButtonState.MOON
     private var animator: DarkThemeButtonAnimator
-    private var switchThemeOnClick: Boolean = true
     private val darkThemeRepo = DarkThemeRepository(context)
+    private var stateChangedHandler: StateChangedHandler = DefaultStateChangedHandler()
+    private var onClickListener: OnClickListener? = null
+
+    var sunColor
+        get() = ContextCompat.getColor(context, R.color.sunColor)
+        set(color) {
+            sun.setColorFilter(color)
+            sunRays.setColorFilter(color)
+            animator.updateSunColor(color)
+            invalidate()
+            requestLayout()
+        }
+
+    var moonColor
+        get() = ContextCompat.getColor(context, R.color.moonColor)
+        set(color) {
+            moon.setColorFilter(color)
+            animator.updateMoonColor(color)
+            invalidate()
+            requestLayout()
+        }
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.dark_theme_button, this, true)
+        LayoutInflater.from(context).inflate(R.layout.dark_theme_button, this)
 
         animator = DarkThemeButtonAnimator(this, moon, sun, sunRays, moonColor, sunColor)
 
         context.obtainStyledAttributes(attrs, R.styleable.DarkThemeButton).apply {
-            // maybe it's redundant to call these setters
-            setMoonColor(getColor(R.styleable.DarkThemeButton_moonColor, moonColor))
-            setSunColor(getColor(R.styleable.DarkThemeButton_sunColor, sunColor))
-            setSwitchThemeOnClick(
-                getBoolean(R.styleable.DarkThemeButton_switchThemeOnClick, switchThemeOnClick)
-            )
+            moonColor = getColor(R.styleable.DarkThemeButton_moonColor, moonColor)
+            sunColor = getColor(R.styleable.DarkThemeButton_sunColor, sunColor)
+//            setSwitchThemeOnClick(
+//                getBoolean(R.styleable.DarkThemeButton_switchThemeOnClick, switchThemeOnClick)
+//            )
             recycle()
         }
 
-        if (isDarkThemeEnabled()) {
-            isDark = true
-            hideSun()
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        // confusing
+        // use presenter/controller to seperate the logic from the view
+        currentButtonState = if (isDarkThemeEnabled()) {
+            ButtonState.MOON
         } else {
-            isDark = false
-            hideMoon()
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            ButtonState.SUN
         }
+
+        updateButton()
+
+        stateChangedHandler.onInflate(currentButtonState)
 
         setOnClickListener(this)
         setOnTouchListener(this)
     }
 
     override fun onClick(v: View) {
-        isDark = if (isDark) {
-            letThereBeLight()
-            false
-        } else {
-            goodNight()
-            true
-        }
-
-        darkThemeRepo.setDarkThemeMode(isDark)
+        currentButtonState = currentButtonState.getOpposite()
+        playAnimation()
+        darkThemeRepo.setDarkThemeMode(currentButtonState)
+        onClickListener?.onClick()
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
@@ -95,84 +105,69 @@ class DarkThemeButton(
         }
     }
 
-    fun setSunColor(@ColorInt color: Int) {
-        sunColor = color
-        sun.setColorFilter(sunColor)
-        sunRays.setColorFilter(sunColor)
-        animator.updateSunColor(sunColor)
-        invalidate()
-        requestLayout()
-    }
+//    fun setSwitchThemeOnClick(switchThemeOnClick: Boolean): DarkThemeButton {
+//        this.switchThemeOnClick = switchThemeOnClick
+//        return this
+//    }
 
-    fun setMoonColor(@ColorInt color: Int) {
-        moonColor = color
-        moon.setColorFilter(moonColor)
-        animator.updateMoonColor(moonColor)
-        invalidate()
-        requestLayout()
-    }
-
-    fun setSwitchThemeOnClick(switchThemeOnClick: Boolean): DarkThemeButton {
-        this.switchThemeOnClick = switchThemeOnClick
+    fun setButtonChangeHandler(handler: StateChangedHandler): DarkThemeButton {
+        stateChangedHandler = handler
         return this
     }
 
-    fun setOnThemeChangedListener(listener: OnThemeChangedListener): DarkThemeButton {
-        this.onThemeChangedListener = listener
+    fun setOnClickListener(listener: OnClickListener): DarkThemeButton {
+        onClickListener = listener
         return this
     }
 
     private fun isDarkThemeEnabled(): Boolean {
         return if (darkThemeRepo.isDarkThemeButtonClicked()) {
-            darkThemeRepo.isDarkThemeActive()
+            darkThemeRepo.isDarkThemeEnabled()
         } else {
             resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         }
     }
 
-    private fun letThereBeLight() {
-        animator.moonToSun { isDark ->
-            if (switchThemeOnClick) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                onThemeChangedListener?.onThemeChanged(isDark)
-            }
+    private fun playAnimation() {
+        val animationEndListener = DarkThemeButtonAnimator.AnimationEndListener {
+            stateChangedHandler.onAnimationEnded(currentButtonState)
+        }
 
-            onAnimationFinishedListener?.onFinish()
+        if (currentButtonState == ButtonState.MOON) {
+            animator.sunToMoon(animationEndListener)
+        } else {
+            animator.moonToSun(animationEndListener)
+        }
+
+    }
+
+    private fun updateButton() {
+        if (currentButtonState == ButtonState.MOON) {
+            sun.alpha = 0f
+            sunRays.alpha = 0f
+        } else {
+            moon.alpha = 0f
         }
     }
 
-    private fun goodNight() {
-        animator.sunToMoon { isDark ->
-            if (switchThemeOnClick) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                onThemeChangedListener?.onThemeChanged(isDark)
-            }
-
-            onAnimationFinishedListener?.onFinish()
-        }
+    interface StateChangedHandler {
+        fun onInflate(currentState: ButtonState)
+        fun onAnimationEnded(newState: ButtonState)
     }
 
-
-    private fun hideSun() {
-        sun.alpha = 0f
-        sunRays.alpha = 0f
+    interface OnClickListener {
+        fun onClick()
     }
+}
 
-    private fun hideMoon() {
-        moon.alpha = 0f
-    }
+enum class ButtonState(val id: Int) {
+    MOON(0), SUN(1)
+}
 
-    fun interface OnThemeChangedListener {
-        fun onThemeChanged(isDark: Boolean)
+// change name
+private fun ButtonState.getOpposite(): ButtonState {
+    return when (this) {
+        ButtonState.MOON -> ButtonState.SUN
+        ButtonState.SUN -> ButtonState.MOON
     }
-
-    fun interface OnAnimationFinishedListener {
-        fun onFinish()
-    }
-//
-//    companion object {
-//        fun setPersistDarkTheme(enabled: Boolean) {
-//            DarkThemeRepository.setDarkThemeSwitched(enabled)
-//        }
-//    }
 }

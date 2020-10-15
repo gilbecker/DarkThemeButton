@@ -1,43 +1,39 @@
 package com.wakaw.darkmode
 
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.gilbecker.ButtonState
 import com.gilbecker.DarkThemeButton
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
-
+import kotlinx.android.synthetic.main.dark_theme_button.view.*
 
 class MainActivity : AppCompatActivity() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_main)
-		setSupportActionBar(findViewById(R.id.toolbar))
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.nav_view)
+//        bottomNavigationView.setupWithNavController()
 
-//		darkThemeButton.setSwitchThemeOnClick(false)
-		darkThemeButton.setOnThemeChangedListener { isDark ->
-			val theme = if (isDark) "night" else "morning"
-			Toast.makeText(this@MainActivity, "Good $theme!", Toast.LENGTH_SHORT).show()
-//			finish()
-//			startActivity(Intent(this, javaClass))
-//			overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-		}
-//
-//		darkThemeButton.setMoonColor(Color.parseColor("#000000"))
-//		darkThemeButton.setSunColor(Color.RED)
-	}
+        // add listener
+        // override handler
+        darkThemeButton.moonColor = darkThemeButton.sunColor
 
-//	override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//		val menuInflater = menuInflater
-//		menuInflater.inflate(R.menu.menu_main, menu)x
-////		val getItem: MenuItem = menu.findItem(R.id.get_item)
-////		if (getItem != null) {
-////			val button = getItem.getActionView() as AppCompatButton
-////			//Set a ClickListener, the text,
-////			//the background color or something like that
-////		}
-//		return super.onCreateOptionsMenu(menu)
-//	}
+        darkThemeButton.setButtonChangeHandler(object : DarkThemeButton.StateChangedHandler {
+            override fun onInflate(currentState: ButtonState) {
+                Toast.makeText(applicationContext, "Inflated", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAnimationEnded(newState: ButtonState) {
+                Toast.makeText(applicationContext, "Switched to $newState", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }

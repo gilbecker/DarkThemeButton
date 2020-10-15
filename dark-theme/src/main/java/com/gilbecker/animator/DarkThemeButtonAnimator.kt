@@ -64,7 +64,7 @@ internal class DarkThemeButtonAnimator(
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
-                    listener.onEnd(false)
+                    listener.onEnd()
                 }
             })
             start()
@@ -83,7 +83,7 @@ internal class DarkThemeButtonAnimator(
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
-                    listener.onEnd(true)
+                    listener.onEnd()
                 }
             })
             start()
@@ -219,6 +219,6 @@ internal class DarkThemeButtonAnimator(
         )
 
     fun interface AnimationEndListener {
-        fun onEnd(isDark: Boolean)
+        fun onEnd()
     }
 }
