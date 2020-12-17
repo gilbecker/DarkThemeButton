@@ -5,7 +5,7 @@ import android.view.View
 import android.view.animation.BounceInterpolator
 import android.widget.ImageView
 import androidx.annotation.ColorInt
-import com.gilbecker.DarkThemeButton
+import com.gilbecker.ButtonState
 
 private const val SCALE_X = "scaleX"
 private const val SCALE_Y = "scaleY"
@@ -14,7 +14,7 @@ private const val ROTATION = "rotation"
 private const val COLOR_FILTER = "colorFilter"
 
 internal class DarkThemeButtonAnimator(
-    private val button: DarkThemeButton,
+    private val button: View,
     private val moon: ImageView,
     private val sun: ImageView,
     private val sunRays: ImageView,
@@ -55,6 +55,13 @@ internal class DarkThemeButtonAnimator(
                 getMoonToSunColorAnimator(sunRays)
             )
             start()
+        }
+    }
+
+    fun animateTransition(state: ButtonState, listener: AnimationEndListener) {
+        when (state) {
+            ButtonState.DARK -> TODO()
+            ButtonState.LIGHT -> TODO()
         }
     }
 

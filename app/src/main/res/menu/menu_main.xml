@@ -4,7 +4,7 @@
     tools:context="com.wakaw.darkmode.MainActivity">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_darkTheme"
         android:title=""
         app:actionViewClass="com.gilbecker.DarkThemeButton"
         app:actionLayout="@layout/dark_theme_button"

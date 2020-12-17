@@ -17,4 +17,13 @@
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_dashboard" />
 
+    <!--Global action-->
+    <action android:id="@+id/open_settings_fragment"
+        app:destination="@id/settingsFragment"/>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.wakaw.darkmode.ui.preferences.SettingsFragment"
+        android:label="SettingsFragment" />
+
 </navigation>
