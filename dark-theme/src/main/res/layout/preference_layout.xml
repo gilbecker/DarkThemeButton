@@ -49,10 +49,10 @@
 
     </RelativeLayout>
 
-    <com.gilbecker.DarkThemeButton
+    <com.gilbecker.darktheme.DarkThemeButton
         android:id="@+id/darkThemeButton"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
         android:background="@null"
         android:clickable="false"
         android:focusable="false" />

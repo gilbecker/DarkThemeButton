@@ -7,23 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.wakaw.darkmode.ui.home.HomeFragment"
+        android:name="com.gilbecker.darktheme.example.app.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.wakaw.darkmode.ui.home.HomeFragment"
-        android:label="@string/title_settings"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <!--Global action-->
-    <action android:id="@+id/open_settings_fragment"
-        app:destination="@id/settingsFragment"/>
-
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.wakaw.darkmode.ui.preferences.SettingsFragment"
+        android:id="@+id/navigation_settings"
+        android:name="com.gilbecker.darktheme.example.app.ui.preferences.SettingsFragment"
         android:label="SettingsFragment" />
 
 </navigation>

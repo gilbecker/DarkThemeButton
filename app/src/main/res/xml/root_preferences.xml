@@ -19,7 +19,7 @@
 
     <PreferenceCategory app:title="@string/sync_header">
 
-        <com.gilbecker.DarkThemePreference
+        <com.gilbecker.darktheme.DarkThemePreference
             app:key="sync"
             app:title="Dark Theme"
             app:summaryOff="Dark theme is disabled"

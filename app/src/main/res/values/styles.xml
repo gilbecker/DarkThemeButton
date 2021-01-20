@@ -16,12 +16,6 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <!-- This will set the fade in animation on all your activities by default -->
-    <style name="WindowAnimationTransition">
-        <item name="android:windowEnterAnimation">@anim/my_fade_in</item>
-        <item name="android:windowExitAnimation">@anim/my_fade_out</item>
-    </style>
 
 </resources>

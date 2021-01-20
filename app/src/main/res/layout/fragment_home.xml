@@ -6,36 +6,97 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
+<!--    <TextView-->
+<!--        android:id="@+id/text_home"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="20sp"-->
+<!--        android:text="Some Text Some Text Some Text Some Text Some TextSome Text Some Text"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/darkThemeButton"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/settingsButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Settings"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/text_home"-->
+<!--        app:layout_constraintLeft_toLeftOf="@id/text_home"/>-->
+
+<!--    <com.gilbecker.darktheme.DarkThemeButton-->
+<!--        android:id="@+id/darkThemeButton"-->
+<!--        android:layout_width="80dp"-->
+<!--        android:layout_height="80dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
     <TextView
-        android:id="@+id/text_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:text="Some Text"
-        app:layout_constraintBottom_toTopOf="@id/darkThemeButton"
+        android:text="You can use it in a Toolbar"
+        android:drawableEnd="@drawable/ic_baseline_arrow_upward_24"
+        android:drawablePadding="2dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/iconsColor"
+        android:layout_gravity="center_vertical"/>
+
+    <com.gilbecker.darktheme.DarkThemeButton
+        android:id="@+id/button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/settingsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        app:layout_constraintTop_toBottomOf="@id/text_home"
-        app:layout_constraintLeft_toLeftOf="@id/text_home"/>
-
-    <com.gilbecker.DarkThemeButton
-        android:id="@+id/darkThemeButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:moonColor="#000000"
+        app:sunColor="#f7a000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="...customize its colors"
+        android:drawableEnd="@drawable/ic_baseline_arrow_upward_24"
+        android:drawablePadding="2dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="30dp"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/iconsColor"
+        app:layout_constraintTop_toBottomOf="@id/button"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.gilbecker.darktheme.DarkThemeButton
+        android:id="@+id/fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="...and even set is as a Floating Button!"
+        android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
+        android:drawablePadding="2dp"
+        android:layout_marginEnd="14dp"
+        android:textColor="@color/iconsColor"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="@id/fab"
+        app:layout_constraintBottom_toBottomOf="@id/fab"
+        app:layout_constraintEnd_toStartOf="@id/fab"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

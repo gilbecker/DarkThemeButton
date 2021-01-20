@@ -5,17 +5,23 @@
     android:layout_height="wrap_content"
     android:background="@drawable/oval_shape">
 
-    <ImageView
-        android:id="@+id/sunRays"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/run_rays"/>
+<!--    <FrameLayout-->
+<!--        android:id="@+id/sun"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
 
-    <ImageView
-        android:id="@+id/sun"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/sun" />
+        <ImageView
+            android:id="@+id/sunRays"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/run_rays"/>
+
+        <ImageView
+            android:id="@+id/sunCircle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/sun" />
+<!--    </FrameLayout>-->
 
     <ImageView
         android:id="@+id/moon"
