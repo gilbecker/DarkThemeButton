@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 30
@@ -29,6 +31,7 @@ subprojects {
     tasks.withType(Javadoc).all { enabled = false }
 }
 
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -37,5 +40,46 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+}
+
+def libraryGroupId = 'com.gilbecker'
+def libraryArtifactId = 'darkthemebutton'
+def libraryVersion = '1.0.0'
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = libraryGroupId
+                artifactId = libraryArtifactId
+                version = libraryVersion
+            }
+        }
+    }
+}
+
+bintray {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    user = properties.getProperty('bintray.user')
+    key = properties.getProperty('bintray.apikey')
+    publications = ['release']
+    publish = true
+    override = true
+    pkg {
+        repo = 'dark-theme-button-repo'
+        name = libraryArtifactId
+        desc = 'Dark Theme Button for Android apps'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/gilbecker/DarkThemeButton.git'
+        publicDownloadNumbers = true
+        version {
+            name = libraryVersion
+            released = new Date()
+        }
+    }
 }
