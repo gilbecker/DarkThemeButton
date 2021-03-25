@@ -1,10 +1,10 @@
-package com.gilbecker.darktheme
+package com.gilbecker.darkthemepreference
 
 import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.PreferenceViewHolder
 import androidx.preference.SwitchPreferenceCompat
-import com.gilbecker.R
+import com.gilbecker.darktheme.DarkThemeButton
 
 class DarkThemePreference(
     context: Context,
