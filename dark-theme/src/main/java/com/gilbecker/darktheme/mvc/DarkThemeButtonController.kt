@@ -8,7 +8,7 @@ import com.gilbecker.darktheme.Theme
 import com.gilbecker.repository.DarkThemeRepository
 
 internal class DarkThemeButtonController(
-    val context: Context,
+    private val context: Context,
     private val darkThemeButton: DarkThemeButton
 ) : Contract.Controller {
 
